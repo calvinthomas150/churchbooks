@@ -8,6 +8,7 @@ import com.webcohesion.ofx4j.io.AggregateUnmarshaller;
 import com.webcohesion.ofx4j.io.OFXParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -19,8 +20,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+@Component
 public class TransactionLoader {
     private final Logger logger = LoggerFactory.getLogger(TransactionLoader.class);
 
@@ -58,13 +61,17 @@ public class TransactionLoader {
         AggregateUnmarshaller<ResponseEnvelope> unmarshaller = new AggregateUnmarshaller<>(ResponseEnvelope.class);
         ResponseEnvelope responseEnvelope = unmarshaller.unmarshal(inputStream);
         BankingResponseMessageSet bankSet = (BankingResponseMessageSet) responseEnvelope.getMessageSet(MessageSetType.banking);
-
-        return new ArrayList<>(bankSet.getStatementResponses().stream()
-                .flatMap(bankStatement -> bankStatement.getMessage()
-                        .getTransactionList()
-                        .getTransactions()
-                        .stream()
-                )
-                .toList());
+        try {
+            return new ArrayList<>(bankSet.getStatementResponses().stream()
+                    .flatMap(bankStatement -> bankStatement.getMessage()
+                            .getTransactionList()
+                            .getTransactions()
+                            .stream()
+                    )
+                    .toList());
+        } catch (NullPointerException e){
+            logger.debug("Could not parse transactions, returning empty list instead: ", e);
+            return Collections.emptyList();
+        }
     }
 }
