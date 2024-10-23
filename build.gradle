@@ -20,9 +20,27 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${swaggerVersion}"
+	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+
+	implementation platform("org.testcontainers:testcontainers-bom:${testContainersVersion}")
+	testImplementation 'org.testcontainers:testcontainers'
+	testImplementation 'org.testcontainers:postgresql'
+	testImplementation 'org.testcontainers:junit-jupiter'
+
+	compileOnly "org.projectlombok:lombok:${lombokVersion}"
+	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+	runtimeOnly "org.postgresql:postgresql:${postgresVersion}"
+
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-    implementation "com.webcohesion.ofx4j:ofx4j:${ofx4jVersion}"
+	implementation "com.webcohesion.ofx4j:ofx4j:${ofx4jVersion}"
+
+	implementation "org.apache.tika:tika-core:${tikaVersion}"
+
 }
 
 tasks.named('test') {

@@ -1,4 +1,4 @@
-package org.churchbooks.churchbooks.transactions;
+package org.churchbooks.churchbooks.transactions.util;
 
 import com.webcohesion.ofx4j.domain.data.MessageSetType;
 import com.webcohesion.ofx4j.domain.data.ResponseEnvelope;
@@ -27,37 +27,19 @@ import java.util.List;
 public class TransactionLoader {
     private final Logger logger = LoggerFactory.getLogger(TransactionLoader.class);
 
-    public List<Transaction> loadTransactionsFromURI(String filePath) throws IOException, OFXParseException, URISyntaxException {
-        try {
-            InputStream inputStream = readFromURI(filePath);
-            return parseTransactions(inputStream);
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            throw e;
-        }
-    }
 
-    public List<Transaction> loadTransactionsFromLocalFile(String filePath) throws IOException, OFXParseException {
-        try {
-            InputStream inputStream = readLocalFile(filePath);
-            return parseTransactions(inputStream);
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            throw e;
-        }
-    }
-
-    private InputStream readLocalFile(String filePath) throws FileNotFoundException {
+    public InputStream readLocalFile(String filePath) throws FileNotFoundException {
         return new FileInputStream(Path.of(filePath).toFile());
     }
 
-    private InputStream readFromURI(String fileURI) throws IOException, URISyntaxException {
+    public InputStream readFromURI(String fileURI) throws IOException, URISyntaxException {
         URL urlObject = new URI(fileURI).toURL();
         URLConnection urlConnection = urlObject.openConnection();
         return urlConnection.getInputStream();
     }
 
-    private List<Transaction> parseTransactions(InputStream inputStream) throws IOException, OFXParseException {
+    public List<Transaction> parseTransactions(InputStream inputStream) throws IOException, OFXParseException {
+        logger.info("Parsing OFX file");
         AggregateUnmarshaller<ResponseEnvelope> unmarshaller = new AggregateUnmarshaller<>(ResponseEnvelope.class);
         ResponseEnvelope responseEnvelope = unmarshaller.unmarshal(inputStream);
         BankingResponseMessageSet bankSet = (BankingResponseMessageSet) responseEnvelope.getMessageSet(MessageSetType.banking);
