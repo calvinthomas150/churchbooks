@@ -21,6 +21,11 @@ Different endpoint for loading from ofx and for direct input
 - Save invalid files but in different location
 - Only save files after validating
 
+### Database interactions - ORM (JPA) vs no ORM (JDBC)
+#### Options
+- Use JPA to interact with database. Abstracts table creation and supports more sophisticated CRUD queries
+- Use JDBC only. Requires DDL script, support for basic CRUD queries. Removes need for Lombok dependency.
+
 ### Subscriptions / Repeating transactions
 #### Options
 - Extra field in request for frequency
@@ -28,7 +33,3 @@ Different endpoint for loading from ofx and for direct input
 
 ## Unsupported features
 - Storing credit card information
-
-Implementation Details
-Entities 
-add sql to schema file and use records vs @Entity notation on a class

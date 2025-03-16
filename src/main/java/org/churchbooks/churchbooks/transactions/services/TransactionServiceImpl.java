@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -29,19 +28,17 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<Transactions> save(InputStream inputStream) throws IOException, OFXParseException {
-        logger.debug("Parsing OFX file");
+        logger.debug("Parsing transactions from file...");
         List<Transaction> transactions = transactionLoader.parseTransactions(inputStream);
-        logger.debug("Saving parsed transactions to database");
+        logger.debug("Persisting transactions to database...");
         return transactionRepository.saveAll(transactions.stream()
-                .map(Transactions::fromOfxTransaction)
-                .collect(Collectors.toList())
-        );
-    }
+                .map(Transactions::fromOfxTransaction).toList());
 
+    }
 
     @Override
     public List<Transactions> findAll(){
-     return transactionRepository.findAll();
+        return transactionRepository.findAll();
     }
 
 }

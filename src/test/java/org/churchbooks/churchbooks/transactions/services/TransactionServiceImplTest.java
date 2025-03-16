@@ -40,7 +40,7 @@ class TransactionServiceImplTest {
         try (InputStream inputStream = new FileInputStream(Path.of(filePath).toFile())) {
             transactionService.save(inputStream);
         }
-        Assertions.assertEquals(10, transactionRepository.findAll().size());
+        Assertions.assertEquals(10, ((List<Transactions>) transactionRepository.findAll()).size());
     }
 
     @Test
