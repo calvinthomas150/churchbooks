@@ -1,4 +1,4 @@
-package org.churchbooks.churchbooks.transactions;
+package org.churchbooks.churchbooks.transactions.util;
 
 import com.webcohesion.ofx4j.domain.data.common.Transaction;
 import com.webcohesion.ofx4j.io.OFXParseException;
@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -19,7 +20,8 @@ class TransactionLoaderTest {
     @Test
     @DisplayName("When a valid file is provided the transactions are loaded successfully")
     void loadValidTestFile() throws IOException, OFXParseException {
-        List<Transaction> transactions = loader.loadTransactionsFromLocalFile("src/test/resources/example.ofx");
+        InputStream inputStream = loader.readLocalFile("src/test/resources/example.ofx");
+        List<Transaction> transactions = loader.parseTransactions(inputStream);
         assertEquals(10, transactions.size());
         assertEquals(4000, transactions.getFirst().getAmount());
     }
@@ -27,7 +29,8 @@ class TransactionLoaderTest {
     @Test
     @DisplayName("When an empty file is provided no transactions are loaded")
     void loadEmptyTestFile() throws IOException, OFXParseException {
-        List<Transaction> transactions = loader.loadTransactionsFromLocalFile("src/test/resources/empty.ofx");
+        InputStream inputStream = loader.readLocalFile("src/test/resources/zeroTransactions.ofx");
+        List<Transaction> transactions = loader.parseTransactions(inputStream);
         assertEquals(0, transactions.size());
     }
 
@@ -36,7 +39,7 @@ class TransactionLoaderTest {
     void loadMissingTestFile() {
         assertThrows(
                 FileNotFoundException.class,
-                () -> loader.loadTransactionsFromLocalFile("")
+                () -> loader.parseTransactions(loader.readLocalFile(""))
         );
     }
 
@@ -45,16 +48,16 @@ class TransactionLoaderTest {
     void loadInvalidTestFile() {
         assertThrows(
                 OFXParseException.class,
-                () -> loader.loadTransactionsFromLocalFile("src/test/resources/invalid.ofx")
+                () -> loader.parseTransactions(loader.readLocalFile("src/test/resources/invalid.ofx"))
         );
     }
 
     @Test
     @DisplayName("When a valid link is provided the transactions are loaded successfully")
     void loadValidTestURI() throws IOException, URISyntaxException, OFXParseException {
-        List<Transaction> transactions = loader.loadTransactionsFromURI(
-                "https://raw.githubusercontent.com/ftomassetti/ofx-java/master/src/test/resources/example.ofx"
-        );
+        String url = "https://raw.githubusercontent.com/calvinthomas150/churchbooks/refs/heads/main/src/test/resources/example.ofx";
+        InputStream inputStream = loader.readFromURI(url);
+        List<Transaction> transactions = loader.parseTransactions(inputStream);
         assertEquals(10, transactions.size());
         assertEquals(4000, transactions.getFirst().getAmount());
     }
@@ -64,7 +67,7 @@ class TransactionLoaderTest {
     void loadInvalidTestURI() {
         assertThrows(
                 URISyntaxException.class,
-                () -> loader.loadTransactionsFromURI("https://")
+                () -> loader.parseTransactions(loader.readFromURI("https://"))
         );
     }
 }
