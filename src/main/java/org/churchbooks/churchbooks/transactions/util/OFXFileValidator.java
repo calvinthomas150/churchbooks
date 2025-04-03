@@ -5,7 +5,6 @@ import org.apache.tika.mime.MediaType;
 import org.churchbooks.churchbooks.transactions.exception.FileValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -15,15 +14,12 @@ import java.util.Set;
 
 /**
  * Validates an ofx file using the file extension and content  */
-@Component
 public class OFXFileValidator implements FileValidator {
 
     private static final Logger logger = LoggerFactory.getLogger(OFXFileValidator.class);
     private final Tika tika;
 
-    public OFXFileValidator(){
-        this.tika = new Tika();
-    }
+    public OFXFileValidator(){this.tika = new Tika();}
 
     public OFXFileValidator(Tika tika){
         this.tika = tika;
@@ -32,7 +28,7 @@ public class OFXFileValidator implements FileValidator {
     @Override
     public void validate(MultipartFile file) {
         if (file.isEmpty()) {
-            logger.error(String.format("File validation failed, empty file: %s", file.getOriginalFilename()));
+            logger.error("File validation failed, empty file");
             throw new FileValidationException("Empty file");
         }
 

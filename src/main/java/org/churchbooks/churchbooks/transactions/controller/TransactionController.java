@@ -4,7 +4,7 @@ import com.webcohesion.ofx4j.io.OFXParseException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.churchbooks.churchbooks.transactions.entities.Transactions;
 import org.churchbooks.churchbooks.transactions.services.TransactionService;
-import org.churchbooks.churchbooks.transactions.util.FileValidator;
+import org.churchbooks.churchbooks.transactions.util.OFXFileValidator;
 import org.churchbooks.churchbooks.transactions.util.StorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,12 +26,12 @@ public class TransactionController {
 
     private final TransactionService transactionService;
     private final StorageService storageService;
-    private final FileValidator fileValidator;
+    private final OFXFileValidator fileValidator;
 
-    public TransactionController(@Autowired TransactionService transactionService, @Autowired StorageService storageService, @Autowired FileValidator fileValidator) {
+    public TransactionController(@Autowired TransactionService transactionService, @Autowired StorageService storageService) {
         this.transactionService = transactionService;
         this.storageService = storageService;
-        this.fileValidator = fileValidator;
+        this.fileValidator = new OFXFileValidator();
     }
 
     @Operation(summary = "Finds all transactions", description = "Returns a list of transactions")
