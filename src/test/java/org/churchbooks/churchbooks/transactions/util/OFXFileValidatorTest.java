@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class OFXFileValidatorTest {
 
-    private final OFXFileValidator ofxFileValidator = new OFXFileValidator();
+    private final OFXFileValidator ofxFileValidator = new OFXFileValidator(new Tika());
 
     @Mock
     private Tika mockTika;

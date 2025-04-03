@@ -57,7 +57,7 @@ class TransactionControllerTest {
 
     @Test
     @DisplayName("Request to parse and save ofx file is successful")
-    public void saveUploadedOfxFile() throws Exception {
+    void saveUploadedOfxFile() throws Exception {
         MockMultipartFile multipartFile = new MockMultipartFile(
                 "file",
                 "example.ofx",
@@ -74,7 +74,7 @@ class TransactionControllerTest {
 
     @Test
     @DisplayName("Request to parse and save ofx file fails when ofx file cannot be parsed")
-    public void shouldFailOnInvalidOFXFile() throws Exception {
+    void shouldFailOnInvalidOFXFile() throws Exception {
         MockMultipartFile multipartFile = new MockMultipartFile(
                 "file",
                 "invalid.ofx",
@@ -86,7 +86,7 @@ class TransactionControllerTest {
 
     @Test
     @DisplayName("Request to parse and save ofx file fails when file is unsupported type")
-    public void shouldFailOnUnsupportedFileType() throws Exception {
+    void shouldFailOnUnsupportedFileType() throws Exception {
         MockMultipartFile multipartFile = new MockMultipartFile(
                 "file",
                 "unsupported.ofx",

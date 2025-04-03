@@ -8,6 +8,7 @@ class ChurchbooksApplicationTests {
 
 	@Test
 	void contextLoads() {
+		// Verify that the spring context loads
 	}
 
 

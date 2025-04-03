@@ -30,6 +30,9 @@ Different endpoint for loading from ofx and for direct input
 #### Options
 - Extra field in request for frequency
 
+### Budgets and Categories
+- Default budget span is monthly.
+- Categories can have allocations greater than the total budget.
 
 ## Unsupported features
 - Storing credit card information

@@ -14,7 +14,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @Testcontainers
 @DataJpaTest // pulls in fewer dependencies for repository tests than @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class TransactionRepositoryTest {
+class TransactionRepositoryTest {
 
     @Container
     @ServiceConnection
