@@ -21,8 +21,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
 
-import static org.churchbooks.churchbooks.InitalTestData.budgetId;
-import static org.churchbooks.churchbooks.InitalTestData.categoryId;
+import static org.churchbooks.churchbooks.InitialTestData.defaultCategoryId;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
@@ -55,22 +54,22 @@ class CategoryControllerTest {
     @Test
     @DisplayName("Request to save a category entry is successful")
     void saveCategory() throws Exception {
-        Category mockCategory = new Category( null, "mock", Timestamp.from(Instant.now()), BigDecimal.valueOf(10), budgetId);
+        Category mockCategory = new Category( null, "mock", Timestamp.from(Instant.now()), BigDecimal.valueOf(10));
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/categories")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(mockCategory));
         this.mockMvc.perform(mockRequest).andDo(log())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.budgetId", equalTo(budgetId.toString())));
+                .andExpect(jsonPath("$.name", equalTo("mock")));
     }
 
     @Test
     @DisplayName("Request to update a category entry is successful")
     void updateCategory() throws Exception {
-        CategoryDetails mockCategory = new CategoryDetails("mock", BigDecimal.valueOf(20), budgetId);
+        CategoryDetails mockCategory = new CategoryDetails("mock", BigDecimal.valueOf(20));
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
-                .put("/categories/"+categoryId)
+                .put("/categories/"+ defaultCategoryId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(mockCategory));

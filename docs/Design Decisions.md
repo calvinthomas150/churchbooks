@@ -30,9 +30,10 @@ Different endpoint for loading from ofx and for direct input
 #### Options
 - Extra field in request for frequency
 
-### Budgets and Categories
-- Default budget span is monthly.
-- Categories can have allocations greater than the total budget.
+### Budget Implementation
+- Default budget span is one time.
+- Amount allocations can be greater than the total budget.
+- Budget allocation is denormalized and thus computed each time a transaction is saved. This improves budget read time but increases write time for transactions
 
 ## Unsupported features
 - Storing credit card information

@@ -10,7 +10,7 @@ The current goals of this software are to meet the requirements of small churche
 
 - [x]  Transaction import via OFX
 - [x]  Budget creation
-- [ ]  Tracking transactions against budget
+- [x]  Tracking transactions against budget
 - [ ]  Notes against transactions
 - [ ]  Uploading and storing receipts against transactions
 - [ ]  Splitting transactions to multiple budget requirements

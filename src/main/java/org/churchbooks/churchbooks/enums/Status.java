@@ -1,7 +1,7 @@
 package org.churchbooks.churchbooks.enums;
 
 public enum Status {
-    VALID,
+    NEW,
     UPDATED,
     DELETED
 }

@@ -17,9 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.churchbooks.churchbooks.InitalTestData.budgetId;
-import static org.churchbooks.churchbooks.InitalTestData.categoryId;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 /** Integration and data transformation tests*/
 @SpringBootTest
@@ -43,39 +41,21 @@ class CategoryServiceImplTest {
 
     @Test
     void save() {
-        CategoryDetails mockCategory = new CategoryDetails("mock", BigDecimal.valueOf(20), budgetId);
-        Category category = categoryService.save(mockCategory);
-        assertThat(categoryRepository.existsById(category.id())).isTrue();
-    }
-
-    @Test
-    void saveWithNoBudget() {
-        CategoryDetails mockCategory = new CategoryDetails("mock", BigDecimal.valueOf(20), UUID.randomUUID());
-        assertThrows(
-                ResourceNotFoundException.class,
-                () -> categoryService.save(mockCategory)
-        );
+        Category category = categoryService.save(new CategoryDetails("mock", BigDecimal.valueOf(20)));
+        assertTrue(categoryRepository.existsById(category.id()));
     }
 
     @Test
     void update(){
-        CategoryDetails mockCategory = new CategoryDetails("mockValue", BigDecimal.valueOf(30), budgetId);
-        Category category = categoryService.update(categoryId, mockCategory);
-        assertThat(category.name()).isEqualTo("mockValue");
-    }
-
-    @Test
-    void updateWithNoBudget(){
-        CategoryDetails mockCategory = new CategoryDetails("mockValue", BigDecimal.valueOf(30), UUID.randomUUID());
-        assertThrows(
-                ResourceNotFoundException.class,
-                () -> categoryService.update(categoryId, mockCategory)
-        );
+        Category category = categoryService.save(new CategoryDetails("mock", BigDecimal.valueOf(20)));
+        Category newCategory =
+                categoryService.update(category.id(), new CategoryDetails("newValue", BigDecimal.valueOf(30)));
+        assertEquals("newValue", newCategory.name());
     }
 
     @Test
     void updateWithNoCategory(){
-        CategoryDetails mockCategory = new CategoryDetails("mockValue", BigDecimal.valueOf(30), budgetId);
+        CategoryDetails mockCategory = new CategoryDetails("mockValue", BigDecimal.valueOf(30));
         UUID randomId = UUID.randomUUID();
         assertThrows(
                 ResourceNotFoundException.class,

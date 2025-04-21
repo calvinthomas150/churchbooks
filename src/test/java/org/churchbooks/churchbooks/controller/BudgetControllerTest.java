@@ -2,6 +2,7 @@ package org.churchbooks.churchbooks.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.churchbooks.churchbooks.dto.BudgetDetails;
+import org.churchbooks.churchbooks.enums.Frequency;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.math.BigDecimal;
 
-import static org.churchbooks.churchbooks.InitalTestData.budgetId;
+import static org.churchbooks.churchbooks.InitialTestData.defaultBudgetId;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -50,9 +51,17 @@ class BudgetControllerTest {
     }
 
     @Test
+    @DisplayName("Request to find a budgets by id is successful")
+    void findById() throws Exception {
+        this.mockMvc.perform(get("/budgets/" + defaultBudgetId))
+                .andDo(log())
+                .andExpect(status().isAccepted());
+    }
+
+    @Test
     @DisplayName("Request to save a budget entry is successful")
     void saveBudget() throws Exception {
-        BudgetDetails mockBudget = new BudgetDetails( "mock", BigDecimal.valueOf(10));
+        BudgetDetails mockBudget = new BudgetDetails( "mock", BigDecimal.valueOf(10), Frequency.ONCE);
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/budgets")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -64,10 +73,10 @@ class BudgetControllerTest {
 
     @Test
     @DisplayName("Request to update a budget entry is successful")
-    void updateBudget() throws Exception {
-        BudgetDetails mockCategory = new BudgetDetails("mock", BigDecimal.valueOf(50));
+    void update() throws Exception {
+        BudgetDetails mockCategory = new BudgetDetails("mock", BigDecimal.valueOf(50), Frequency.ONCE);
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
-                .put("/budgets/" + budgetId)
+                .put("/budgets/" + defaultBudgetId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(mockCategory));
