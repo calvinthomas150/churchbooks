@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/transactions")
@@ -48,12 +46,8 @@ public class TransactionController {
     public List<TransactionDetails> parseOfx(@Validated @RequestParam("file") MultipartFile file) throws IOException, OFXParseException {
         logger.info("OFX file uploaded by user: {}", file.getOriginalFilename());
         fileValidator.validate(file);
-        // give the file a unique name before saving
-        String filename = UUID.randomUUID() + ".ofx";
-        storageService.store(file, filename);
-        try (InputStream inputStream = file.getInputStream()) {
-            return transactionService.parseOfx(inputStream);
-        }
+        storageService.store(file);
+        return transactionService.parseOfx(file);
     }
 
     @Operation(summary = "Save a transaction", description = "Returns the saved transaction")

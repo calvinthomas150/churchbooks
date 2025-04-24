@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.mock.web.MockMultipartFile;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -55,7 +56,7 @@ class TransactionServiceImplTest {
     void parseOfx() throws IOException, OFXParseException {
         String filePath = "src/test/resources/example.ofx";
         try (InputStream inputStream = new FileInputStream(Path.of(filePath).toFile())) {
-            List<TransactionDetails> transactionDetails = transactionService.parseOfx(inputStream);
+            List<TransactionDetails> transactionDetails = transactionService.parseOfx(new MockMultipartFile(filePath, inputStream));
             assertEquals(10, transactionDetails.size());
         }
     }
