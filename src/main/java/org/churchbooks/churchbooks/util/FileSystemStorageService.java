@@ -7,10 +7,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 @Component
 public class FileSystemStorageService implements StorageService {
@@ -19,12 +22,14 @@ public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocation;
 
-    public FileSystemStorageService(@Value("${datastore.valid.ofx}") String uploadDirectory) {
+    public FileSystemStorageService(@Value("${datastore.valid}") String uploadDirectory) {
         rootLocation = Paths.get(uploadDirectory);
     }
 
     @Override
-    public void store(MultipartFile file, String filename) {
+    public URI store(MultipartFile file) throws IOException {
+        // give the file a unique name before saving
+        String filename = UUID.randomUUID().toString();
         Path destinationFile = this.rootLocation.resolve(filename).normalize().toAbsolutePath();
         logger.info("Destination file path: {}", destinationFile);
         try (InputStream inputStream = file.getInputStream()) {
@@ -32,6 +37,7 @@ public class FileSystemStorageService implements StorageService {
         }catch (Exception e){
             throw new StorageException(e);
         }
+        return destinationFile.toUri();
     }
 
 }

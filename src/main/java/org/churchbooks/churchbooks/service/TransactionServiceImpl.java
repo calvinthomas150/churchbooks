@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,10 +58,12 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionDetails> parseOfx(InputStream inputStream) throws IOException, OFXParseException {
+    public List<TransactionDetails> parseOfx(MultipartFile file) throws IOException, OFXParseException {
         logger.info("Parsing transactions from file...");
-        List<Transaction> transactions = transactionLoader.parseTransactions(inputStream);
-        return transactions.stream().map(TransactionDetails::fromOfx).toList();
+        try (InputStream inputStream = file.getInputStream()) {
+            List<Transaction> transactions = transactionLoader.parseTransactions(inputStream);
+            return transactions.stream().map(TransactionDetails::fromOfx).toList();
+        }
     }
 
     @Override

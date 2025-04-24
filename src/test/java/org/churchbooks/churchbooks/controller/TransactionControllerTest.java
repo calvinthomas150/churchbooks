@@ -30,7 +30,6 @@ import static org.churchbooks.churchbooks.InitialTestData.defaultBudgetId;
 import static org.churchbooks.churchbooks.InitialTestData.defaultCategoryId;
 import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -47,11 +46,14 @@ class TransactionControllerTest {
 
     @Autowired
     TransactionController transactionController;
+
     @Container
     @ServiceConnection
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15");
+
     @Autowired
     MockMvc mockMvc;
+
     @MockBean
     private StorageService storageService;
 
@@ -104,7 +106,7 @@ class TransactionControllerTest {
                 .andDo(log())
                 .andExpect(status().isOk());
 
-        then(this.storageService).should().store(eq(multipartFile), anyString());
+        then(this.storageService).should().store(eq(multipartFile));
     }
 
     @Test
