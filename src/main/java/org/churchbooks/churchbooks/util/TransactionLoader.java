@@ -39,7 +39,6 @@ public class TransactionLoader {
     }
 
     public List<Transaction> parseTransactions(InputStream inputStream) throws IOException, OFXParseException {
-        logger.info("Parsing OFX file");
         AggregateUnmarshaller<ResponseEnvelope> unmarshaller = new AggregateUnmarshaller<>(ResponseEnvelope.class);
         ResponseEnvelope responseEnvelope = unmarshaller.unmarshal(inputStream);
         BankingResponseMessageSet bankSet = (BankingResponseMessageSet) responseEnvelope.getMessageSet(MessageSetType.banking);

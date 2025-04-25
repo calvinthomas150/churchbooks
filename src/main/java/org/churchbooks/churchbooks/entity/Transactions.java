@@ -1,7 +1,6 @@
 package org.churchbooks.churchbooks.entity;
 
-import com.webcohesion.ofx4j.domain.data.common.Transaction;
-import org.churchbooks.churchbooks.enums.Source;
+import org.churchbooks.churchbooks.dto.TransactionDetails;
 import org.churchbooks.churchbooks.enums.Status;
 import org.churchbooks.churchbooks.enums.TransactionType;
 import org.springframework.data.annotation.Id;
@@ -19,17 +18,34 @@ public record Transactions(
         BigDecimal amount,
         Status status,
         String memo,
-        Source source
+        UUID budgetId,
+        UUID categoryId
 ) {
-    public static Transactions fromOfxTransaction(Transaction transaction) {
+    public static Transactions fromTransactionDetails(TransactionDetails transactionDetails) {
         return new Transactions(
                 null,
                 Timestamp.from(Instant.now()),
-                TransactionType.CREDIT,
-                Timestamp.from(transaction.getDatePosted().toInstant()),
-                transaction.getBigDecimalAmount(),
-                Status.VALID,
-                transaction.getMemo(),
-                Source.OFX);
+                transactionDetails.transactionType(),
+                transactionDetails.datePosted(),
+                transactionDetails.amount(),
+                transactionDetails.status(),
+                transactionDetails.memo(),
+                transactionDetails.budgetId(),
+                transactionDetails.categoryId()
+        );
+    }
+
+    public Transactions update(TransactionDetails transactionDetails) {
+        return new Transactions(
+                this.id,
+                this.createdAt,
+                transactionDetails.transactionType(),
+                transactionDetails.datePosted(),
+                transactionDetails.amount(),
+                transactionDetails.status(),
+                transactionDetails.memo(),
+                transactionDetails.budgetId(),
+                transactionDetails.categoryId()
+        );
     }
 }
