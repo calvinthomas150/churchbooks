@@ -1,0 +1,17 @@
+services:
+  churchbooks_db:
+    image: bitnami/postgresql:15.7.0
+    ports:
+      - '5432:5432'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - backend
+  churchbooks_backend:
+    build: .
+    ports:
+      - '8080:8080'
+    networks:
+      - backend
+networks:
+  backend:
