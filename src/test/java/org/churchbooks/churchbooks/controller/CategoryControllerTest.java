@@ -23,6 +23,7 @@ import java.time.Instant;
 
 import static org.churchbooks.churchbooks.InitialTestData.defaultCategoryId;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -42,6 +43,11 @@ class CategoryControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
+    @Test
+    void contextLoads() {
+        assertNotNull(categoryController, "Failed to inject controller instance");
+    }
 
     @Test
     @DisplayName("Request to find all categories is successful")

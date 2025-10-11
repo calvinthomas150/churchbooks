@@ -12,7 +12,7 @@ The current goals of this software are to meet the requirements of small churche
 - [x]  Budget creation
 - [x]  Tracking transactions against budget
 - [ ]  Notes against transactions
-- [ ]  Uploading and storing receipts against transactions
+- [x]  Uploading and storing receipts against transactions
 - [ ]  Splitting transactions to multiple budget requirements
 - [ ]  Simple reporting, e.g. Income vs Expenditure and Balance
 
